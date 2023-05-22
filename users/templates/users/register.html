@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% block content %}
+<div>register page</div>
+<form method="POST">
+  {% csrf_token %} {{form.as_table}}
+  <button type="submit">Создать аккаунт</button>
+  {% endblock content %}
+</form>

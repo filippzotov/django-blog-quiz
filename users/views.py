@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
+from .models import Profile
+from .forms import ProfileForm
 
 # Create your views here.
 
@@ -14,9 +16,8 @@ def registerUser(request):
         if form.is_valid():
             user = form.save()
             user.save()
-
             messages.success(request, "Аккаунт успешно создан!")
-            # login(request, user)
+            login(request, user)
             return redirect("home")
         else:
             messages.success(request, "Во время регистрации возникла ошибка")
@@ -49,4 +50,46 @@ def loginUser(request):
 def logoutUser(request):
     logout(request)
     messages.info(request, "Вы вышли из системы")
+    return redirect("home")
+
+
+def userProfile(request):
+    profile = request.user.profile
+    context = {
+        "profile": profile,
+    }
+    return render(request, "users/userProfile.html", context=context)
+
+
+def editProfileUser(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+
+            return redirect("profile")
+
+    context = {"form": form}
+
+    return render(request, "users/profile_form.html", context=context)
+
+
+def getProfile(request, pk):
+    user_profile = Profile.objects.get(pk=pk)
+    context = {"profile": user_profile}
+    return render(request, "users/getProfile.html", context=context)
+
+
+def followUser(request, pk):
+    profile = request.user.profile
+    follow = Profile.objects.get(pk=pk)
+    if not follow in profile.follows.all():
+        profile.follows.add(follow)
+    else:
+        profile.follows.remove(follow)
+
+    # profile.follows.add(pk)
     return redirect("home")

@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block content %}
+<div>profile page</div>
+<img class="img-thumbnail" src="{{profile.image.url}}" alt="..." />
+<p>{{profile.user.username}}</p>
+<p>{{profile.email}}</p>
+<p>{{profile.summary}}</p>
+<p>{{profile.about}}</p>
+<p>{{profile.created}}</p>
+
+{% if user.is_authenticated %}
+<a class="btn btn-primary" href="follow/">Follow</a>
+{% endif %} {% endblock content %}

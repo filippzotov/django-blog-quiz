@@ -1,15 +1,32 @@
 {% extends 'base.html' %} {% block content %}
-<form action="{% url 'login' %}" method="POST">
-  {% csrf_token %}
-  <div>
-    <label for="username">Логин</label>
-    <input type="name" type="text" name="username" placeholder="username" />
+<div class="container">
+  <div class="card text-center mt-5">
+    <div class="card-body">
+      <h5 class="card-title">Login</h5>
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <div>
+          <input
+            class="form-control mb-2"
+            type="name"
+            type="text"
+            name="username"
+            placeholder="username"
+          />
+        </div>
+        <div>
+          <input
+            class="form-control mt-2"
+            type="password"
+            type="text"
+            name="password"
+            placeholder="password"
+          />
+        </div>
+        <button class="btn btn-secondary mt-2" type="submit">Войти</button>
+      </form>
+    </div>
   </div>
-  <div>
-    <label for="password">Пароль</label>
-    <input type="password" type="text" name="password" />
-  </div>
-  <button type="submit">Войти</button>
-</form>
+</div>
 
 {% endblock content %}

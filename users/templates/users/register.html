@@ -1,7 +1,15 @@
 {% extends 'base.html' %} {% block content %}
-<div>register page</div>
-<form method="POST">
-  {% csrf_token %} {{form.as_table}}
-  <button type="submit">Создать аккаунт</button>
-  {% endblock content %}
-</form>
+<div class="container">
+  <div class="card mt-5">
+    <div class="card-body">
+      <h5 class="card-title">Register page</h5>
+      <form method="POST">
+        {% csrf_token %} {{form.as_table}}
+        <button class="btn btn-secondary mt-2" type="submit">
+          Создать аккаунт
+        </button>
+        {% endblock content %}
+      </form>
+    </div>
+  </div>
+</div>

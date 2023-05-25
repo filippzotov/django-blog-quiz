@@ -4,15 +4,15 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, SignUpForm
 
 # Create your views here.
 
 
 def registerUser(request):
-    form = UserCreationForm()
+    form = SignUpForm()
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             user.save()

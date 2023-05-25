@@ -1,21 +1,42 @@
 {% extends 'base.html' %} {% block content %}
-<div>profile page</div>
-<img class="img-thumbnail" src="{{profile.image.url}}" alt="..." />
-<p>{{user.username}}</p>
-<p>{{profile.email}}</p>
-<p>{{profile.summary}}</p>
-<p>{{profile.about}}</p>
-<p>{{profile.created}}</p>
+<div class="container">
+  <div>profile page</div>
 
-{% for follower in profile.follows.all %}
-<div class="card" style="width: 18rem">
-  <img class="card-img-top" src="{{follower.image.url}}" alt="Card image cap" />
-  <div class="card-body">
-    <a href="{% url 'get-profile' follower.pk %}"
-      ><h5 class="card-title">{{follower.user.username}}</h5></a
-    >
+  <div class="row">
+    <div class="col-sm-4">
+      <img class="img-thumbnail" src="{{profile.image.url}}" alt="..." />
+      <p>{{user.username}}</p>
+      <p>{{profile.email}}</p>
+      <p>{{profile.summary}}</p>
+      <p>{{profile.created}}</p>
+    </div>
+    <div class="col-sm-6">
+      <p>{{profile.about}}</p>
+      <div class="container">
+        <p>Follows:</p>
+        <div class="row">
+          {% for follower in profile.follows.all %}
+
+          <div class="col-sm-4">
+            <div class="card">
+              <img
+                class="card-img-top"
+                src="{{follower.image.url}}"
+                alt="Card image cap"
+              />
+              <div class="card-body">
+                <a href="{% url 'get-profile' follower.pk %}"
+                  ><h5 class="card-title">{{follower.user.username}}</h5></a
+                >
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-{% endfor %}
+
 <a href="{% url 'edit-profile' %}">Edit profile</a>
 {% endblock content %}

@@ -18,4 +18,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="home"),
+    path("blog/myblog/", views.userBlogPage, name="my-blog"),
+    path("blog/<int:pk>/", views.getPost, name="get-post"),
+    path("blog/createpost/", views.createPost, name="create-post"),
 ]

@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <img class="img-thumbnail" src="{{post.image.url}}" alt="" />
+      <p>{{post.title}}</p>
+      <p>{{post.published}}</p>
+      <p>{{post.text}}</p>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="card">
+          {{commentForm}}
+          <button class="btn btn-secondary mt-2" type="submit">
+            Отправить
+          </button>
+        </div>
+      </form>
+      {% for comment in post.comment_all %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{comment.user.username}}</h5>
+          <p class="card-text">{{comment.text}}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

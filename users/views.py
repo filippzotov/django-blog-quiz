@@ -93,3 +93,12 @@ def followUser(request, pk):
 
     # profile.follows.add(pk)
     return redirect("home")
+
+
+def searchResults(request):
+    if request.method == "POST":
+        search = request.POST["search"]
+        profiles = Profile.objects.filter(user__username__icontains=search)
+
+        context = {"profiles": profiles}
+        return render(request, "users/searchResults.html", context=context)

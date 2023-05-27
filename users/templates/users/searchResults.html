@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+<div>results:</div>
+{% for profile in profiles %}
+<div class="card mb-3" style="max-width: 540px">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img
+        src="{{profile.image.url}}"
+        class="img-fluid rounded-start"
+        alt="..."
+      />
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a href="{% url 'get-profile' profile.pk %}" class="stretched-link"
+          ><h5 class="card-title">{{profile.user.username}}</h5></a
+        >
+        <p class="card-text">{{profile.summary}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock content %}

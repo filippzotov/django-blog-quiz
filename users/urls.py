@@ -9,4 +9,5 @@ urlpatterns = [
     path("profile/edit/", views.editProfileUser, name="edit-profile"),
     path("user/<int:pk>/", views.getProfile, name="get-profile"),
     path("user/<int:pk>/follow/", views.followUser, name="follow-user"),
+    path("results/", views.searchResults, name="search-users"),
 ]

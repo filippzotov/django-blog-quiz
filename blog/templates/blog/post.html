@@ -5,21 +5,31 @@
       <img class="img-thumbnail" src="{{post.image.url}}" alt="" />
       <p>{{post.title}}</p>
       <p>{{post.published}}</p>
+      {% if user in post.likes.all %}
+      <a href="{% url 'like-post' post.pk %}"
+        >{{post.number_of_likes}} Unlike</a
+      >
+      {% else %}
+      <a href="{% url 'like-post' post.pk %}">{{post.number_of_likes}} Like</a>
+      {% endif %}
       <p>{{post.text}}</p>
       <form method="POST">
         {% csrf_token %}
         <div class="card">
           {{commentForm}}
-          <button class="btn btn-secondary mt-2" type="submit">
+          <button class="btn btn-secondary mt-2 nb-2" type="submit">
             Отправить
           </button>
         </div>
       </form>
-      {% for comment in post.comment_all %}
-      <div class="card mb-3">
+      {% for comment in post.comment_set.all %}
+      <div class="card mt-3">
         <div class="card-body">
-          <h5 class="card-title">{{comment.user.username}}</h5>
+          <h5 class="card-title">{{comment.owner.username}}</h5>
           <p class="card-text">{{comment.text}}</p>
+          <p class="card-text">
+            <small class="text-body-secondary">{{comment.published}}</small>
+          </p>
         </div>
       </div>
       {% endfor %}

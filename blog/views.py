@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .models import Post, Comment
+from users.models import Profile
 from .forms import PostForm, CommentForm
 from django.http import HttpResponseRedirect
 
@@ -19,15 +20,16 @@ def userBlogPage(request):
 
 def getPost(request, pk):
     commentForm = CommentForm()
+    post = Post.objects.get(pk=pk)
     if request.method == "POST":
         commentForm = CommentForm(request.POST)
         if commentForm.is_valid():
-            comment = commentForm.save()
-            comment.owner = request.user
+            text = request.POST["text"]
+            owner = request.user
+            comment = Comment(text=text, owner=owner, post=post)
             comment.save()
             return HttpResponseRedirect(request.path_info)
 
-    post = Post.objects.get(pk=pk)
     context = {"post": post, "commentForm": commentForm}
     return render(request, "blog/post.html", context=context)
 
@@ -44,3 +46,30 @@ def createPost(request):
         return redirect("my-blog")
     context = {"form": form}
     return render(request, "blog/createPostForm.html", context=context)
+
+
+def getBlogPage(request, pk):
+    owner = Profile.objects.get(pk=pk)
+    posts = Post.objects.filter(owner=owner)
+    context = {"posts": posts}
+    return render(request, "blog/getBlog.html", context=context)
+
+
+def subsPage(request):
+    user_profile = request.user.profile
+    follow_keys = user_profile.follows.values_list("pk", flat=True)
+    posts = Post.objects.filter(owner_id__in=follow_keys)
+    print(posts)
+    context = {"posts": posts}
+    return render(request, "blog/subscriptions.html", context=context)
+
+
+def like_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    if not post.likes.filter(pk=request.user.pk).exists():
+        post.likes.add(request.user)
+        post.save()
+    else:
+        post.likes.remove(request.user)
+        post.save()
+    return redirect("get-post", pk)

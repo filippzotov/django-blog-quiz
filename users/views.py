@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
+from django.http import HttpResponseRedirect
 from .models import Profile
 from .forms import ProfileForm, SignUpForm
 
@@ -88,11 +88,12 @@ def followUser(request, pk):
     follow = Profile.objects.get(pk=pk)
     if not follow in profile.follows.all():
         profile.follows.add(follow)
+        profile.save()
     else:
         profile.follows.remove(follow)
+        profile.save()
 
-    # profile.follows.add(pk)
-    return redirect("home")
+    return redirect("get-profile", pk)
 
 
 def searchResults(request):

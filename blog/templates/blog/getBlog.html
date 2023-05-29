@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block content %} {% for post in posts %}
+<div class="card text-bg-dark mt-4">
+  <img
+    src="{{post.image.url}}"
+    class="card-img"
+    height="300"
+    style="object-fit: cover; object-position: middle"
+    alt="..."
+  />
+  <div class="card-img-overlay">
+    <a href="{% url 'get-post' post.pk %}" class="stretched-link"
+      ><h5 class="card-title">{{post.title}}</h5></a
+    >
+    <p class="card-text">{{post.text|truncatechars:100}}</p>
+    <p class="card-text"><small>{{post.published}}</small></p>
+  </div>
+</div>
+{% endfor %} {% endblock content%}

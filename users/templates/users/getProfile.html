@@ -11,6 +11,11 @@
     </div>
     <div class="col-sm-6">
       <p>{{profile.about}}</p>
+      <p>
+        <a href="{% url 'get-blog' profile.pk %}"
+          >{{profile.user.username}} Blog</a
+        >
+      </p>
       <div class="container">
         <p>Follows:</p>
         <div class="row">
@@ -36,7 +41,8 @@
     </div>
   </div>
 </div>
-
-{% if user.is_authenticated %}
+{% if user.is_authenticated %} {% if profile in user.profile.follows.all %}
+<a class="btn btn-primary" href="follow/">Unfollow</a>
+{% else %}
 <a class="btn btn-primary" href="follow/">Follow</a>
-{% endif %} {% endblock content %}
+{% endif %} {% endif %} {% endblock content %}

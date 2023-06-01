@@ -1,38 +1,77 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
+<div class="container mt-4">
   <div class="row justify-content-center">
-    <div class="col-6">
-      <img class="img-thumbnail" src="{{post.image.url}}" alt="" />
-      <p>{{post.title}}</p>
-      <p>{{post.published}}</p>
-      {% if user in post.likes.all %}
-      <a href="{% url 'like-post' post.pk %}"
-        >{{post.number_of_likes}} Unlike</a
-      >
-      {% else %}
-      <a href="{% url 'like-post' post.pk %}">{{post.number_of_likes}} Like</a>
-      {% endif %}
-      <p>{{post.text}}</p>
-      <form method="POST">
-        {% csrf_token %}
-        <div class="card">
-          {{commentForm}}
-          <button class="btn btn-secondary mt-2 nb-2" type="submit">
-            Отправить
-          </button>
+    <div class="col-sm-8">
+      <div class="container">
+        <div class="row">
+          <img class="" src="{{post.image.url}}" alt="" />
         </div>
-      </form>
-      {% for comment in post.comment_set.all %}
-      <div class="card mt-3">
-        <div class="card-body">
-          <h5 class="card-title">{{comment.owner.username}}</h5>
-          <p class="card-text">{{comment.text}}</p>
-          <p class="card-text">
-            <small class="text-body-secondary">{{comment.published}}</small>
-          </p>
+        {% if user == post.owner.user %}
+        <div class="row">
+          <div class="col">
+            <a href="{% url 'delete-post' post.pk %}">Delete Post</a>
+          </div>
+          <div class="col">
+            <a href="{% url 'edit-post' post.pk %}">Edit Post</a>
+          </div>
+        </div>
+        {% endif %}
+        <div class="row">
+          <div class="col">
+            Автор:
+            <a href="{% url 'get-profile' post.owner.pk %}"
+              >{{post.owner.user.username}}</a
+            >
+          </div>
+          <div class="col text-end text-body-secondary">{{post.published}}</div>
+          <div class="col text-end">
+            {% if user in post.likes.all %}
+            <a href="{% url 'like-post' post.pk %}"
+              >{{post.number_of_likes}} Unlike</a
+            >
+            {% else %}
+            <a href="{% url 'like-post' post.pk %}"
+              >{{post.number_of_likes}} Like</a
+            >
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <p class="display-6">{{post.title}}</p>
+        </div>
+        <div class="row">
+          <p>{{post.text}}</p>
+        </div>
+        <div class="row">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="card">
+              {{commentForm}}
+              <button class="btn btn-secondary mt-2 nb-2" type="submit">
+                Отправить
+              </button>
+            </div>
+          </form>
+          {% for comment in post.comment_set.all %}
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{% url 'get-profile' comment.owner.profile.pk %}"
+                  >{{comment.owner.username}}</a
+                >
+              </h5>
+              {% if user == comment.owner %}
+              <a href="{% url 'delete-comment' comment.pk %}">Delete comment</a>
+              {% endif %}
+              <p class="card-text">{{comment.text}}</p>
+              <p class="card-text">
+                <small class="text-body-secondary">{{comment.published}}</small>
+              </p>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
     </div>
   </div>
 </div>

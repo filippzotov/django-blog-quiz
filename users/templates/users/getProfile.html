@@ -3,7 +3,17 @@
   <div>profile page</div>
   <div class="row">
     <div class="col-sm-4">
-      <img class="img-thumbnail" src="{{profile.image.url}}" alt="..." />
+      <img
+        class="img-thumbnail"
+        style="
+          object-fit: cover;
+          object-position: middle;
+          height: 330px;
+          width: 330px;
+        "
+        src="{{profile.image.url}}"
+        alt="..."
+      />
       <p>{{profile.user.username}}</p>
       <p>{{profile.email}}</p>
       <p>{{profile.summary}}</p>
@@ -26,6 +36,12 @@
               <img
                 class="card-img-top"
                 src="{{follower.image.url}}"
+                style="
+                  object-fit: cover;
+                  object-position: middle;
+                  height: 145px;
+                  width: 145px;
+                "
                 alt="Card image cap"
               />
               <div class="card-body">

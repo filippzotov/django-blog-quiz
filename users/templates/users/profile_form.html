@@ -1,18 +1,29 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
+<div class="container mt-4">
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div>profile page</div>
 
     <div class="row">
       <div class="col-sm-4">
-        <img class="img-thumbnail" src="{{user.profile.image.url}}" alt="..." />
+        <img
+          class="img-thumbnail"
+          style="
+            object-fit: cover;
+            object-position: middle;
+            height: 330px;
+            width: 330px;
+          "
+          src="{{user.profile.image.url}}"
+          alt="..."
+        />
         {{form.image}} {{form.email}} {{form.summary}}
       </div>
       <div class="col-sm-6">{{form.about}}</div>
     </div>
 
-    <button type="submit">Сохранить изменения</button>
+    <button type="submit" class="btn btn-secondary mt-2">
+      Сохранить изменения
+    </button>
   </form>
 </div>
 {% endblock content %}

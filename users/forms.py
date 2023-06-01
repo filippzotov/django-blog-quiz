@@ -25,5 +25,9 @@ class ProfileForm(ModelForm):
             "image": FileInput(),
         }
 
-    def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["email"].widget.attrs.update({"class": "form-control mb-2"})
+        self.fields["summary"].widget.attrs.update({"class": "form-control mb-2"})
+        self.fields["about"].widget.attrs.update({"class": "form-control mb-2"})
+        self.fields["image"].widget.attrs.update({"class": "form-control mb-2"})

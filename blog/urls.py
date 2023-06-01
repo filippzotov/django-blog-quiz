@@ -24,4 +24,7 @@ urlpatterns = [
     path("blog/user/<int:pk>", views.getBlogPage, name="get-blog"),
     path("blog/subscriptions/", views.subsPage, name="my-subscriptions"),
     path("blog/like/<int:pk>", views.like_post, name="like-post"),
+    path("blog/delete/<int:pk>", views.delete_post, name="delete-post"),
+    path("blog/edit/<int:pk>", views.edit_post, name="edit-post"),
+    path("blog/comment/delete/<int:pk>", views.delete_comment, name="delete-comment"),
 ]

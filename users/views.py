@@ -55,10 +55,13 @@ def logoutUser(request):
 
 def userProfile(request):
     profile = request.user.profile
+    followers = Profile.objects.filter(follows=profile)
     context = {
         "profile": profile,
+        "selfprofile": 1,
+        "followers": followers,
     }
-    return render(request, "users/userProfile.html", context=context)
+    return render(request, "users/profile.html", context=context)
 
 
 def editProfileUser(request):
@@ -79,8 +82,13 @@ def editProfileUser(request):
 
 def getProfile(request, pk):
     user_profile = Profile.objects.get(pk=pk)
-    context = {"profile": user_profile}
-    return render(request, "users/getProfile.html", context=context)
+    followers = Profile.objects.filter(follows=user_profile)
+    context = {
+        "profile": user_profile,
+        "selfprofile": 0,
+        "followers": followers,
+    }
+    return render(request, "users/profile.html", context=context)
 
 
 def followUser(request, pk):
@@ -103,3 +111,25 @@ def searchResults(request):
 
         context = {"profiles": profiles}
         return render(request, "users/searchResults.html", context=context)
+
+
+def getUserFollows(request, pk):
+    user_profile = Profile.objects.get(pk=pk)
+    followers = user_profile.follows.all()
+
+    print(followers)
+    context = {
+        "followers": followers,
+    }
+    return render(request, "users/followerList.html", context=context)
+
+
+def getUserFollowers(request, pk):
+    user_profile = Profile.objects.get(pk=pk)
+    followers = Profile.objects.filter(follows=user_profile)
+
+    print(followers)
+    context = {
+        "followers": followers,
+    }
+    return render(request, "users/followerList.html", context=context)

@@ -1,1 +1,98 @@
-{% extends 'base.html' %} {% block content %} {% endblock content %}
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-sm-4">
+      <img
+        class="img-thumbnail"
+        style="
+          object-fit: cover;
+          object-position: middle;
+          height: 330px;
+          width: 330px;
+        "
+        src="{{profile.image.url}}"
+        alt="..."
+      />
+      <p>{{profile.user.username}}</p>
+      <p><span>Email: </span>{{profile.email}}</p>
+      <p><span>Summary: </span>{{profile.summary}}</p>
+      <p><span>Created: </span>{{profile.created}}</p>
+    </div>
+    <div class="col-sm-6">
+      <p>{{profile.about}}</p>
+      {% if not selfprofile %}
+      <p>
+        <a href="{% url 'get-blog' profile.pk %}"
+          >{{profile.user.username}} Blog</a
+        >
+      </p>
+      {% endif %}
+      <div class="container">
+        <div class="row">
+          <p>Followers:</p>
+
+          {% for follower in followers %}
+          <div class="col-sm-4">
+            <div class="card">
+              <img
+                class="card-img-top"
+                src="{{follower.image.url}}"
+                style="
+                  object-fit: cover;
+                  object-position: middle;
+                  height: 145px;
+                  width: 145px;
+                "
+                alt="Card image cap"
+              />
+              <div class="card-body">
+                <a href="{% url 'get-profile' follower.pk %}"
+                  ><h5 class="card-title">{{follower.user.username}}</h5></a
+                >
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <a href="{% url 'followers-user' profile.pk %}"><p>See all</p></a>
+        </div>
+        <p>Follows:</p>
+        <div class="row">
+          {% for follower in profile.follows.all %}
+
+          <div class="col-sm-4">
+            <div class="card">
+              <img
+                class="card-img-top"
+                src="{{follower.image.url}}"
+                style="
+                  object-fit: cover;
+                  object-position: middle;
+                  height: 145px;
+                  width: 145px;
+                "
+                alt="Card image cap"
+              />
+              <div class="card-body">
+                <a href="{% url 'get-profile' follower.pk %}"
+                  ><h5 class="card-title">{{follower.user.username}}</h5></a
+                >
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+          <a href="{% url 'follows-user' profile.pk %}"><p>See all</p></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if selfprofile %}
+<a href="{% url 'edit-profile' %}">Edit profile</a>
+{% else %}
+<div></div>
+{% if user.is_authenticated %} {% if profile in user.profile.follows.all %}
+<a class="btn btn-primary" href="follow/">Unfollow</a>
+{% else %}
+<a class="btn btn-primary" href="follow/">Follow</a>
+{% endif %} {% endif %} {% endif %} {% endblock content %}

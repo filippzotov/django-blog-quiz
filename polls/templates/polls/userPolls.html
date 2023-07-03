@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block content %}
+<p>polls</p>
+
+{% for poll in polls %}
+<div>
+  {{poll.title}} {% for question in poll.question_set.all %}
+  <form method="POST">{% csrf_token %} {{form}}</form>
+  {% comment %}
+  <p>{{question.title}}</p>
+  {% endcomment %} {% endfor %}
+</div>
+{% endfor %} {% endblock content %}

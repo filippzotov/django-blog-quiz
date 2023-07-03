@@ -116,8 +116,6 @@ def searchResults(request):
 def getUserFollows(request, pk):
     user_profile = Profile.objects.get(pk=pk)
     followers = user_profile.follows.all()
-
-    print(followers)
     context = {
         "followers": followers,
     }
@@ -127,8 +125,6 @@ def getUserFollows(request, pk):
 def getUserFollowers(request, pk):
     user_profile = Profile.objects.get(pk=pk)
     followers = Profile.objects.filter(follows=user_profile)
-
-    print(followers)
     context = {
         "followers": followers,
     }

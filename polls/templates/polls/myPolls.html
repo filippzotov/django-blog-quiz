@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %} polls
+<a href="{% url 'create-poll' %}" class="btn btn-secondary mt-4"
+  >Создать опрос</a
+>
+{% for poll in polls %}
+<div><a href="">{{ poll.title }}</a></div>
+
+{% for question in poll.question_set.all %}
+<p>{{question.title}}</p>
+{% endfor %}
+<form method="POST" action="{% url 'add-qestion' poll.pk %}">
+  {% csrf_token %} {{ form }}
+  <button class="btn btn-secondary mt-2" type="submit">Добавить</button>
+</form>
+{% endfor %} {% endblock content %}

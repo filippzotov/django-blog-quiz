@@ -29,6 +29,11 @@
       {% endif %}
       <div class="container">
         <div class="row">
+          <a href="{% url 'user-polls' profile.user.pk %}"
+            >{{profile.user.username}}'s Polls</a
+          >
+        </div>
+        <div class="row">
           <p>Followers:</p>
 
           {% for follower in followers %}

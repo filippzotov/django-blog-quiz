@@ -6,4 +6,5 @@ urlpatterns = [
     path("mypolls/createpoll/", views.createPoll, name="create-poll"),
     path("mypolls/<int:poll_pk>/addqestion", views.addQestion, name="add-qestion"),
     path("userpolls/<int:user_pk>", views.userPolls, name="user-polls"),
+    path("userpolls/<int:poll_id>/vote>", views.vote, name="vote-question"),
 ]

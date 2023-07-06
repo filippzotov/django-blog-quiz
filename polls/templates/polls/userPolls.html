@@ -1,12 +1,32 @@
 {% extends 'base.html' %} {% block content %}
 <p>polls</p>
 
-{% for poll in polls %}
+{% comment %} {% for poll in polls %}
 <div>
   {{poll.title}} {% for question in poll.question_set.all %}
   <form method="POST">{% csrf_token %} {{form}}</form>
-  {% comment %}
-  <p>{{question.title}}</p>
-  {% endcomment %} {% endfor %}
+  {% endfor %}
 </div>
-{% endfor %} {% endblock content %}
+{% endfor %} {% endcomment %} {% for poll, questions in poll_questions.items %}
+<h2>{{poll.title}}</h2>
+{% if user in poll.voted_users %} {% for question in questions %}
+<p>{{question.title}} Score: {{question.votes}}</p>
+{% endfor %} {% else %}
+<form method="POST" action="{% url 'vote-question' poll.id %}">
+  {% csrf_token %} {% for question in questions %}
+  <div class="form-check">
+    <input
+      type="radio"
+      name="question"
+      class="form-check-input"
+      id="question{{ forloop.counter }}"
+      value="{{ question.id }}"
+    />
+    <label for="question{{ forloop.counter }}" class="text-200"
+      >{{ question.title }}</label
+    >
+  </div>
+  {% endfor %}
+  <button type="submit">answer</button>
+</form>
+{% endif %} {% endfor %} {% endblock content %}

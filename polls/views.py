@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import QuestionForm, PollForm, AnswerForm
-from .models import Poll, Question
+from .models import Poll, Question, Answer
 from django.contrib.auth.models import User
 
 
@@ -48,5 +48,29 @@ def userPolls(request, user_pk):
     form = AnswerForm()
     user = User.objects.get(pk=user_pk)
     polls = Poll.objects.filter(user=user)
-    context = {"polls": polls, "form": form}
+    poll_questions = {}
+    for poll in polls:
+        questions = Question.objects.filter(poll=poll)
+        poll_questions[poll] = questions
+    context = {
+        "polls": polls,
+        "form": form,
+        "poll_questions": poll_questions,
+    }
     return render(request, "polls/userPolls.html", context)
+
+
+def vote(request, poll_id):
+    poll = Poll.objects.get(pk=poll_id)
+    # user = User.objects.get(pk=poll.user.id)
+    if request.POST:
+        question = Question.objects.get(pk=request.POST["question"])
+
+        user_vote = Answer.objects.filter(user=request.user, poll=poll)
+        if not user_vote:
+            user_vote = Answer(user=request.user, poll=poll, question=question)
+            user_vote.save()
+            question.votes += 1
+            question.save()
+
+    return redirect("user-polls", poll.user.id)

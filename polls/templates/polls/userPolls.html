@@ -1,32 +1,59 @@
 {% extends 'base.html' %} {% block content %}
 <p>polls</p>
-
-{% comment %} {% for poll in polls %}
-<div>
-  {{poll.title}} {% for question in poll.question_set.all %}
-  <form method="POST">{% csrf_token %} {{form}}</form>
-  {% endfor %}
-</div>
-{% endfor %} {% endcomment %} {% for poll, questions in poll_questions.items %}
-<h2>{{poll.title}}</h2>
-{% if user in poll.voted_users %} {% for question in questions %}
-<p>{{question.title}} Score: {{question.votes}}</p>
-{% endfor %} {% else %}
-<form method="POST" action="{% url 'vote-question' poll.id %}">
-  {% csrf_token %} {% for question in questions %}
-  <div class="form-check">
-    <input
-      type="radio"
-      name="question"
-      class="form-check-input"
-      id="question{{ forloop.counter }}"
-      value="{{ question.id }}"
-    />
-    <label for="question{{ forloop.counter }}" class="text-200"
-      >{{ question.title }}</label
-    >
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      {% for poll, questions in poll_questions.items %}
+      <div class="card mt-4">
+        <div class="card-header"><h2>{{poll.title}}</h2></div>
+        {% if user in poll.voted_users %}
+        <ul class="list-group list-group-flush">
+          {% for question in questions %}
+          <li class="list-group-item">
+            {{question.title}} Score:
+            <span> {% widthratio question.votes poll.votes_count 100 %}%</span>
+            <div class="progress">
+              <div
+                class="progress-bar bg-secondary"
+                role="progressbar"
+                style="width: {% widthratio question.votes poll.votes_count 100 %}%"
+                aria-valuenow="25"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <form method="POST" action="{% url 'vote-question' poll.id %}">
+          {% csrf_token %} {% for question in questions %}
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="form-check">
+                <input
+                  type="radio"
+                  name="question"
+                  class="form-check-input"
+                  id="question{{ forloop.counter }}"
+                  value="{{ question.id }}"
+                />
+                <label for="question{{ forloop.counter }}" class="text-200">
+                  {{ question.title }}
+                </label>
+              </div>
+            </li>
+          </ul>
+          {% endfor %}
+          <li class="list-group-item">
+            <button class="btn btn-secondary" type="submit">answer</button>
+          </li>
+          {% endif %}
+        </form>
+      </div>
+      {% endfor %}
+    </div>
   </div>
-  {% endfor %}
-  <button type="submit">answer</button>
-</form>
-{% endif %} {% endfor %} {% endblock content %}
+</div>
+
+{% endblock content %}

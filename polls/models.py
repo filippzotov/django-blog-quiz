@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Profile
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 # Create your models here.
 
@@ -15,6 +16,10 @@ class Poll(models.Model):
         if Answer.objects.exists(user=user, poll=self):
             return False
         return True
+
+    def votes_count(self):
+        questions = Question.objects.filter(poll=self)
+        return questions.aggregate(total_votes=Sum("votes"))["total_votes"]
 
     @property
     def voted_users(self):

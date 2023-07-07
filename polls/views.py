@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import QuestionForm, PollForm, AnswerForm
 from .models import Poll, Question, Answer
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 # Create your views here.
@@ -64,7 +65,11 @@ def vote(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
     # user = User.objects.get(pk=poll.user.id)
     if request.POST:
-        question = Question.objects.get(pk=request.POST["question"])
+        question_pk = request.POST.get("question", False)
+        if not question_pk:
+            messages.error(request, "Необходимо выбрать вариан ответа")
+            return redirect("user-polls", poll.user.id)
+        question = Question.objects.get(pk=question_pk)
 
         user_vote = Answer.objects.filter(user=request.user, poll=poll)
         if not user_vote:
@@ -74,3 +79,15 @@ def vote(request, poll_id):
             question.save()
 
     return redirect("user-polls", poll.user.id)
+
+
+def deletePoll(request, poll_pk):
+    poll = Poll.objects.get(pk=poll_pk)
+    if request.user != poll.user:
+        return render(
+            request,
+            "error.html",
+            {"message": "Вы не можете удалить данное голосование"},
+        )
+    poll.delete()
+    return redirect("my-polls")

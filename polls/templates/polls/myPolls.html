@@ -1,15 +1,29 @@
-{% extends 'base.html' %} {% block content %} polls
-<a href="{% url 'create-poll' %}" class="btn btn-secondary mt-4"
-  >Создать опрос</a
->
-{% for poll in polls %}
-<div><a href="">{{ poll.title }}</a></div>
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <a href="{% url 'create-poll' %}" class="btn btn-secondary mt-4">
+        Создать опрос
+      </a>
+      {% for poll in polls %}
+      <div class="card mt-4">
+        <div class="card-header">{{ poll.title }}</div>
+        <ul class="list-group list-group-flush">
+          {% for question in poll.question_set.all %}
+          <li class="list-group-item">{{question.title}}</li>
+          {% endfor %}
+          <form method="POST" action="{% url 'add-qestion' poll.pk %}">
+            {% csrf_token %} {{ form.title }}
+            <button class="btn btn-secondary" type="submit">Добавить</button>
+            <a class="btn btn-secondary" href="{% url 'delete-poll' poll.pk %}"
+              >Удалить</a
+            >
+          </form>
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
-{% for question in poll.question_set.all %}
-<p>{{question.title}}</p>
-{% endfor %}
-<form method="POST" action="{% url 'add-qestion' poll.pk %}">
-  {% csrf_token %} {{ form }}
-  <button class="btn btn-secondary mt-2" type="submit">Добавить</button>
-</form>
-{% endfor %} {% endblock content %}
+{% endblock content %}

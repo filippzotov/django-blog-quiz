@@ -9,7 +9,9 @@ from django.http import HttpResponseRedirect
 
 
 def index(request):
-    return render(request, "blog/index.html")
+    articles = Post.objects.all()[:3]
+    context = {"articles": articles}
+    return render(request, "blog/index.html", context=context)
 
 
 def userBlogPage(request):

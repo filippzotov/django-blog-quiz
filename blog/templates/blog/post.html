@@ -43,6 +43,7 @@
           <p>{{post.text}}</p>
         </div>
         <div class="row">
+          {% if user.is_authenticated %}
           <form method="POST">
             {% csrf_token %}
             <div class="card">
@@ -52,7 +53,8 @@
               </button>
             </div>
           </form>
-          {% for comment in post.comment_set.all %}
+
+          {% endif %} {% for comment in post.comment_set.all %}
           <div class="card mt-3">
             <div class="card-body">
               <h5 class="card-title">
